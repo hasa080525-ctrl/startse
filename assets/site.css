@@ -99,7 +99,9 @@ header{
 
 /* ---------- Hero ---------- */
 .hero{
-  background:linear-gradient(180deg, var(--sunny-light) 0%, var(--sunny) 100%);
+  background:
+    linear-gradient(180deg, rgba(255,243,210,0.92) 0%, rgba(255,203,61,0.88) 100%),
+    url('/assets/hero-bg.jpg') center/cover no-repeat;
   position:relative; overflow:hidden; padding-bottom:64px;
 }
 .hero-eyebrow{
