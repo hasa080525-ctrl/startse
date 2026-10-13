@@ -163,6 +163,64 @@
   <svg class="wave" viewBox="0 0 1440 60" preserveAspectRatio="none"><path class="wave-cream-to-sunny" d="M0,32 C240,64 480,0 720,20 C960,40 1200,64 1440,28 L1440,60 L0,60 Z"/></svg>
 </section>
 
+<button type="button" class="help-banner" onclick="openHelpModal()">
+  <div>
+    <div class="help-banner-text">어떤 과목이 궁금하세요?</div>
+    <div class="help-banner-sub">과목만 고르시면 맞는 선생님을 찾아 연락드립니다</div>
+  </div>
+  <span class="help-banner-arrow">빠르게 선택하기 →</span>
+</button>
+
+<div class="help-modal-overlay" id="helpModalOverlay" onclick="if(event.target===this)closeHelpModal()">
+  <div class="help-modal">
+    <button type="button" class="help-modal-close" aria-label="닫기" onclick="closeHelpModal()">×</button>
+
+    <div id="helpStep1">
+      <h3>어떤 도움이 필요하세요?</h3>
+      <p class="help-modal-sub">과목만 고르시면 맞는 선생님을 찾아 연락드립니다</p>
+      <div class="help-grid">
+        <div class="help-card" onclick="pickHelpSubject('한글떼기', '한글떼기', '자음·모음부터 문장 읽기까지, 아이 속도에 맞춰 지도합니다')"><span class="help-card-icon">🔤</span>한글떼기</div>
+        <div class="help-card" onclick="pickHelpSubject('초등국어', '초등국어', '어휘력·독해력부터 학교 진도에 맞춘 기초까지')"><span class="help-card-icon">📖</span>초등국어</div>
+        <div class="help-card" onclick="pickHelpSubject('초등수학', '초등수학', '연산 정확도부터 개념 이해까지, 결손 없이 순서대로')"><span class="help-card-icon">📐</span>초등수학</div>
+        <div class="help-card" onclick="pickHelpSubject('초등영어', '초등영어', '알파벳·파닉스부터 기초 문장 읽기까지')"><span class="help-card-icon">🔠</span>초등영어</div>
+        <div class="help-card" onclick="pickHelpSubject('추천받고 싶어요', '학년별 맞춤 추천', '연령과 상황에 맞는 과목·선생님을 추천해드립니다')"><span class="help-card-icon">🎯</span>추천받고 싶어요</div>
+      </div>
+    </div>
+
+    <div id="helpStep2" style="display:none;">
+      <button type="button" class="help-back" onclick="backToHelpStep1()">← 다시 고르기</button>
+      <h3 class="help-step2-title" id="helpStep2Title">한글떼기</h3>
+      <p class="help-step2-tagline" id="helpStep2Tagline"></p>
+
+      <div class="help-section-label">연령/학년</div>
+      <div class="help-pill-grid" id="helpGradeGrid">
+        <button type="button" class="help-pill" data-grade="미취학(5~6세)">미취학(5~6세)</button>
+        <button type="button" class="help-pill" data-grade="7세(취학 전)">7세(취학 전)</button>
+        <button type="button" class="help-pill" data-grade="초등 1~2학년">초등 1~2학년</button>
+        <button type="button" class="help-pill" data-grade="초등 3~6학년">초등 3~6학년</button>
+      </div>
+
+      <div class="help-section-label">연락처</div>
+      <div class="help-form-row">
+        <div class="help-field"><label>아이 이름 *</label><input type="text" id="hName" placeholder="예: 김민준"></div>
+        <div class="help-field"><label>연락처 *</label><input type="tel" id="hPhone" placeholder="010-0000-0000"></div>
+      </div>
+      <div class="help-field"><label>남기실 말씀 (선택)</label><textarea id="hMessage" rows="3" placeholder="현재 한글 수준이나 궁금한 점을 적어주세요"></textarea></div>
+
+      <button type="button" class="help-submit" onclick="submitHelpForm()">바로 신청하기</button>
+    </div>
+
+    <div id="helpStep3" style="display:none; text-align:center;">
+      <div style="font-size:40px; margin-bottom:10px;">🎉</div>
+      <h3>신청이 접수됐어요!</h3>
+      <p class="help-modal-sub">신청 내용이 정상적으로 접수됐습니다.<br>확인 후 빠르게 연락드리겠습니다.</p>
+      <a href="tel:010-3951-0535" class="help-submit" style="display:block; text-decoration:none; margin-top:20px;">☎ 바로 전화 상담하기 · 010-3951-0535</a>
+      <a href="https://open.kakao.com/o/sOXeVnpi" target="_blank" rel="noopener" class="help-kakao">💬 카카오톡으로 상담하기</a>
+      <button type="button" class="help-back" style="margin-top:16px;" onclick="closeHelpModal()">홈페이지 더 둘러보기 →</button>
+    </div>
+  </div>
+</div>
+
 <section id="elementary">
   <div class="wrap">
     <div class="section-head">
@@ -330,7 +388,7 @@
       </div>
       <div class="field"><label>남기실 말씀 (선택)</label><input type="text" id="fMessage" placeholder="현재 한글 수준이나 궁금한 점을 적어주세요"></div>
       <button class="form-submit" type="button" onclick="submitApplyForm()">무료 학습 진단 신청하기</button>
-      <div class="form-note">신청하기를 누르면 신청 내용이 자동으로 복사되고 카카오톡 오픈채팅이 열립니다. 채팅창에 붙여넣기(꾹 눌러서 붙여넣기) 하시면 접수가 완료됩니다.</div>
+      <div class="form-note">신청하기를 누르면 신청 내용이 자동으로 복사됩니다. 카카오톡 오픈채팅에 붙여넣기(꾹 눌러서 붙여넣기) 하시면 접수가 완료됩니다.</div>
     </div>
   </div>
 </section>
