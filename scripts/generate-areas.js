@@ -105,6 +105,36 @@ function faqMini() {
   </div>
 </section>`;
 }
+// Matches faqMini() above verbatim - keep in sync if that copy ever changes.
+function faqMiniJsonLd() {
+  return `<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "방문 수업도 가능한가요?", "acceptedAnswer": {"@type": "Answer", "text": "화상 수업이 기본이며, 전국 어디서나 동일하게 진행됩니다. 방문 수업은 지역과 선생님 배정 상황에 따라 상담 후 가능 여부를 안내해드립니다."}},
+    {"@type": "Question", "name": "상담이나 학습 진단에 비용이 드나요?", "acceptedAnswer": {"@type": "Answer", "text": "아니요, 상담과 학습 진단은 무료이며 등록을 강요하지 않습니다."}}
+  ]
+}
+</script>`;
+}
+// itemListElement entries are [name, url] pairs; url is omitted (no "item") for the final/current-page entry per schema.org convention.
+function breadcrumbJsonLd(items) {
+  const entries = items.map((it, i) => {
+    const pos = i + 1;
+    if (it.url) return `{"@type": "ListItem", "position": ${pos}, "name": "${esc(it.name)}", "item": "${it.url}"}`;
+    return `{"@type": "ListItem", "position": ${pos}, "name": "${esc(it.name)}"}`;
+  }).join(',\n    ');
+  return `<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    ${entries}
+  ]
+}
+</script>`;
+}
 
 function regionPageTemplate(region, track) {
   const title = `${region.name} ${track.label} | 한글완전정복`;
@@ -121,6 +151,12 @@ function regionPageTemplate(region, track) {
 <html lang="ko">
 <head>
 ${head(title, desc, canonical, keywords)}
+${breadcrumbJsonLd([
+    { name: '홈', url: `${SITE}/` },
+    { name: '지역별 과외', url: `${SITE}/areas/` },
+    { name: `${region.name} ${track.label}` },
+  ])}
+${faqMiniJsonLd()}
 </head>
 <body>
 ${header()}
@@ -181,6 +217,13 @@ function districtPageTemplate(region, district, track) {
 <html lang="ko">
 <head>
 ${head(title, desc, canonical, keywords)}
+${breadcrumbJsonLd([
+    { name: '홈', url: `${SITE}/` },
+    { name: '지역별 과외', url: `${SITE}/areas/` },
+    { name: `${region.name} ${track.label}`, url: `${SITE}${parentUrl}` },
+    { name: district_ },
+  ])}
+${faqMiniJsonLd()}
 </head>
 <body>
 ${header()}
@@ -233,7 +276,11 @@ function hubTemplate() {
   return `<!DOCTYPE html>
 <html lang="ko">
 <head>
-${head('전국 지역별 과외 전체 목록 | 한글완전정복', '전국 16개 광역지자체, 시/군/구, 유아 한글떼기·초등과외 안내 페이지 모음입니다.', `${SITE}/areas/`, '전국 한글과외, 지역별 유아과외, 지역별 초등과외')}
+${head('전국 지역별 과외 전체 목록 | 한글완전정복', '전국 16개 광역지자체 및 시/군/구별로 정리한 유아 한글떼기·초등 국어·수학·영어 과외 안내 페이지 모음입니다. 원하시는 지역을 찾아 들어가 보세요.', `${SITE}/areas/`, '전국 한글과외, 지역별 유아과외, 지역별 초등과외')}
+${breadcrumbJsonLd([
+    { name: '홈', url: `${SITE}/` },
+    { name: '지역별 과외' },
+  ])}
 </head>
 <body>
 ${header()}
